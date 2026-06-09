@@ -82,11 +82,14 @@ La contraseña no se almacena en ningún fichero.
 | Componente | Tiempo aprox. |
 |---|---|
 | Paquetes apt | 1-3 min |
-| Descarga Anaconda (~1 GB) | 5-15 min (según red) |
-| Instalación Anaconda | 2-4 min |
-| Creación entorno conda | 10-20 min |
+| Descarga Miniconda (~100 MB) | 1-3 min (según red) |
+| Instalación Miniconda | < 1 min |
+| Instalación solver libmamba | 1-2 min |
+| Creación entorno conda | 5-10 min |
 | anaconda-navigator | 2-5 min |
-| **Total estimado** | **20-45 min** |
+| **Total estimado** | **10-20 min** |
+
+> Se usa **Miniconda** en lugar de Anaconda (10x menos descarga) y el solver **libmamba** (5-10x más rápido en resolución de dependencias), reduciendo el tiempo total a la mitad aproximadamente.
 
 Al ejecutarse en paralelo, el tiempo total equivale al del equipo más lento.
 

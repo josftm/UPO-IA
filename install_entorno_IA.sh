@@ -76,8 +76,8 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 SUDO_PASS="${SSH_PASS}"
 CONDA_USER="${SSH_USER}"
-ANACONDA_INSTALLER="Anaconda3-2024.10-1-Linux-x86_64.sh"
-ANACONDA_URL="https://repo.anaconda.com/archive/\${ANACONDA_INSTALLER}"
+ANACONDA_INSTALLER="Miniconda3-latest-Linux-x86_64.sh"
+ANACONDA_URL="https://repo.anaconda.com/miniconda/\${ANACONDA_INSTALLER}"
 ANACONDA_DIR="\${HOME}/anaconda3"
 ENV_NAME="entornoIA2425"
 YML_PATH="\${HOME}/entornoIA2425.yml"
@@ -114,18 +114,18 @@ done
 # =============================================================
 # [2/6] Anaconda
 # =============================================================
-echo "[2/6] Comprobando Anaconda..."
+echo "[2/6] Comprobando Miniconda..."
 
 if [ -f "\${ANACONDA_DIR}/bin/conda" ]; then
-    echo "  [YA INSTALADO] Anaconda (\${ANACONDA_DIR})"
-    ALREADY_INSTALLED+=("anaconda3")
+    echo "  [YA INSTALADO] Miniconda/Anaconda (\${ANACONDA_DIR})"
+    ALREADY_INSTALLED+=("miniconda3")
 else
-    echo "  [DESCARGANDO]  Anaconda (~1 GB, puede tardar varios minutos)..."
+    echo "  [DESCARGANDO]  Miniconda (~100 MB)..."
     curl -fsSL "\${ANACONDA_URL}" -o "/tmp/\${ANACONDA_INSTALLER}"
-    echo "  [INSTALANDO]   Anaconda en modo silencioso..."
+    echo "  [INSTALANDO]   Miniconda en modo silencioso..."
     bash "/tmp/\${ANACONDA_INSTALLER}" -b -p "\${ANACONDA_DIR}"
     rm -f "/tmp/\${ANACONDA_INSTALLER}"
-    echo "  [OK] Anaconda instalado."
+    echo "  [OK] Miniconda instalado."
 fi
 
 # Asegurar PATH y conda disponible en esta sesión
@@ -138,10 +138,21 @@ if ! grep -q "anaconda3/bin" "\${HOME}/.bashrc" 2>/dev/null; then
 fi
 
 # =============================================================
-# [3/6] conda init
+# [3/6] conda init + solver rápido (libmamba)
 # =============================================================
-echo "[3/6] Inicializando conda..."
+echo "[3/6] Inicializando conda y configurando solver rápido..."
 "\${ANACONDA_DIR}/bin/conda" init bash --quiet
+
+# Instalar libmamba solver si no está ya (acelera enormemente la resolución
+# de dependencias al crear el entorno)
+if "\${ANACONDA_DIR}/bin/conda" list -n base | grep -q "conda-libmamba-solver"; then
+    echo "  [YA INSTALADO] conda-libmamba-solver"
+else
+    echo "  [INSTALANDO]   conda-libmamba-solver (solver rápido)..."
+    "\${ANACONDA_DIR}/bin/conda" install -n base conda-libmamba-solver -y -q
+fi
+"\${ANACONDA_DIR}/bin/conda" config --set solver libmamba
+echo "  [OK] Solver libmamba activado."
 
 # =============================================================
 # [4/6] Entorno conda entornoIA2425
@@ -259,8 +270,8 @@ echo "  Instalación masiva del entorno IA"
 echo "  Rango: ${IP_START} → ${IP_END}  (${TOTAL} equipos)"
 echo "  Usuario SSH: ${SSH_USER}"
 echo "  Logs: ${LOG_DIR}/"
-echo "  AVISO: Anaconda (~1 GB) y el entorno conda pueden"
-echo "  tardar 20-40 min por equipo."
+echo "  AVISO: Miniconda (~100 MB) + entorno conda con solver"
+echo "  libmamba. Tiempo estimado: 10-20 min por equipo."
 echo "======================================================"
 echo -e "${NC}"
 
