@@ -5,7 +5,7 @@
 # Uso: ./install_entorno_IA.sh <IP_inicial> <IP_final>
 # Ejemplo: ./install_entorno_IA.sh 192.168.1.1 192.168.1.30
 #
-# REQUISITO: entornoIA2425.yml debe estar en el mismo directorio que este
+# REQUISITO: IAEnv.yml debe estar en el mismo directorio que este
 # script. Se copiará automáticamente a cada equipo remoto vía scp.
 # =============================================================================
 
@@ -30,11 +30,11 @@ IP_END="$2"
 
 # --- Verificar que el .yml existe junto al script ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-YML_FILE="${SCRIPT_DIR}/entornoIA2425.yml"
+YML_FILE="${SCRIPT_DIR}/IAEnv.yml"
 
 if [ ! -f "$YML_FILE" ]; then
     echo -e "${RED}Error: no se encuentra '${YML_FILE}'.${NC}"
-    echo -e "Asegúrate de que entornoIA2425.yml está en el mismo directorio que este script."
+    echo -e "Asegúrate de que IAEnv.yml está en el mismo directorio que este script."
     exit 1
 fi
 
@@ -79,8 +79,8 @@ CONDA_USER="${SSH_USER}"
 ANACONDA_INSTALLER="Miniconda3-latest-Linux-x86_64.sh"
 ANACONDA_URL="https://repo.anaconda.com/miniconda/\${ANACONDA_INSTALLER}"
 ANACONDA_DIR="\${HOME}/anaconda3"
-ENV_NAME="entornoIA2425"
-YML_PATH="\${HOME}/entornoIA2425.yml"
+ENV_NAME="IAEnv"
+YML_PATH="\${HOME}/IAEnv.yml"
 
 # --- Función sudo sin prompt ---
 sudo_cmd() {
@@ -155,7 +155,7 @@ fi
 echo "  [OK] Solver libmamba activado."
 
 # =============================================================
-# [4/6] Entorno conda entornoIA2425
+# [4/6] Entorno conda IAEnv
 # =============================================================
 echo "[4/6] Comprobando entorno conda '\${ENV_NAME}'..."
 
@@ -222,7 +222,7 @@ install_on_host() {
         -o UserKnownHostsFile=/dev/null \
         -o ConnectTimeout=15 \
         "$YML_FILE" \
-        "${SSH_USER}@${IP}:~/entornoIA2425.yml" >> "$LOG" 2>&1 || true
+        "${SSH_USER}@${IP}:~/IAEnv.yml" >> "$LOG" 2>&1 || true
 
     # Ejecutar el script remoto
     local EXIT_CODE=0

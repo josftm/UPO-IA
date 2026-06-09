@@ -9,7 +9,7 @@ Dado un rango de IPs, el script se conecta por SSH a cada equipo del aula de for
 - Actualización completa del sistema (`apt update` + `apt upgrade`)
 - Paquetes base: `openssh-server`, `net-tools`, `curl`
 - **Anaconda3** (2024.10-1) — instalación silenciosa en `~/anaconda3`
-- Entorno conda **`entornoIA2425`** — creado desde `entornoIA2425.yml`
+- Entorno conda **`IAEnv`** — creado desde `IAEnv.yml`
 - Configuración de **Jupyter Notebook** con directorio raíz `~/`
 - **anaconda-navigator**
 
@@ -19,7 +19,7 @@ Si algún componente ya está instalado en un equipo, se omite y se notifica al 
 
 - El equipo del profesor: Ubuntu con acceso por red al aula.
 - Los equipos remotos: Ubuntu con SSH activo (`openssh-server`) y usuario con permisos `sudo`.
-- Los archivos `install_entorno_IA.sh` y `entornoIA2425.yml` deben estar **en el mismo directorio**.
+- Los archivos `install_entorno_IA.sh` y `IAEnv.yml` deben estar **en el mismo directorio**.
 - `sshpass` — el script lo instala automáticamente si no está disponible.
 
 ## Estructura del repositorio
@@ -27,7 +27,7 @@ Si algún componente ya está instalado en un equipo, se omite y se notifica al 
 ```
 IA/
 ├── install_entorno_IA.sh   # Script principal
-├── entornoIA2425.yml       # Definición del entorno conda
+├── IAEnv.yml       # Definición del entorno conda
 └── README.md
 ```
 
@@ -109,7 +109,7 @@ Los equipos que fallan se consolidan en un único fichero:
 
 ## Entorno conda
 
-El entorno `entornoIA2425` incluye Python 3.9 con las siguientes bibliotecas principales:
+El entorno `IAEnv` incluye Python 3.9 con las siguientes bibliotecas principales:
 
 - **NumPy**, **Pandas**, **Matplotlib**, **Seaborn** — análisis y visualización de datos
 - **Scikit-learn**, **Scikit-image** — machine learning y visión por computador
